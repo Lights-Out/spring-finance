@@ -4,11 +4,12 @@ import net.eleven.finance.model.Currency;
 import net.eleven.finance.repository.CurrencyRepository;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.transaction.Transactional;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.Collection;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
  * Created by eleven on 28.10.2018.
  */
 @Repository
-@Transactional
+@Transactional(propagation = Propagation.MANDATORY, rollbackFor = Throwable.class)
 public class CurrencyRepositoryImpl implements CurrencyRepository {
 
     @PersistenceContext

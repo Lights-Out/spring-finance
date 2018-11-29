@@ -12,6 +12,6 @@ public interface ProductRepository {
     Product findById(long id) throws DataAccessException;
     Product findByName(String code) throws DataAccessException;
     Collection<Product> findAll() throws DataAccessException;
-    void add(Product currency) throws DataAccessException;
-    void save(Product currency) throws DataAccessException;
+    void add(Product product) throws DataAccessException;
+    void save(Product product) throws DataAccessException;
 }

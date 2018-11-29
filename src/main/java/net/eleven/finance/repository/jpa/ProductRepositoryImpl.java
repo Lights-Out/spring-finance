@@ -5,6 +5,7 @@ import net.eleven.finance.model.Product;
 import net.eleven.finance.repository.ProductRepository;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -17,8 +18,7 @@ import java.util.List;
  * Created by eleven on 12.11.2018.
  */
 @Repository
-@Transactional
-public class ProductRepositoryImpl implements ProductRepository {
+@Transactional(propagation = Propagation.MANDATORY, rollbackFor = Throwable.class)public class ProductRepositoryImpl implements ProductRepository {
 
     @PersistenceContext
     private EntityManager em;
@@ -48,12 +48,12 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public void add(Product currency) throws DataAccessException {
-        em.persist(currency);
+    public void add(Product product) throws DataAccessException {
+        em.persist(product);
     }
 
     @Override
-    public void save(Product currency) throws DataAccessException {
-        em.merge(currency);
+    public void save(Product product) throws DataAccessException {
+        em.merge(product);
     }
 }

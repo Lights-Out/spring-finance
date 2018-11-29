@@ -1,16 +1,13 @@
 package net.eleven.finance.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 
 /**
@@ -22,7 +19,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Product {
 
-    public Product(@NotEmpty String name, @Positive double price, @NotEmpty Currency currency) {
+    public Product(@NotEmpty String name, @PositiveOrZero double price, @NotNull Currency currency) {
         this.name = name;
         this.price = price;
         this.currency = currency;
@@ -32,18 +29,19 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotEmpty
     private String name;
 
-    @Positive
     private double price;
 
-    @NotEmpty
+    @ManyToOne
     private Currency currency;
 
     @UpdateTimestamp
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime created;
 
     @UpdateTimestamp
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updated;
 }
+
