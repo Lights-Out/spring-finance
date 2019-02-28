@@ -22,7 +22,6 @@ import javax.sql.DataSource;
  * Created by eleven on 27.10.2018.
  */
 @Configuration
-//@ComponentScan("net.eleven.finance.repository")
 public class JpaConfig {
 
     @Inject
@@ -39,7 +38,7 @@ public class JpaConfig {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource);
         em.setJpaVendorAdapter(jpaVendorAdapter);
-        em.setPackagesToScan("net.eleven.finance.repository");
+        em.setPackagesToScan("net.eleven.finance.model");
         em.afterPropertiesSet();
         return em.getObject();
     }

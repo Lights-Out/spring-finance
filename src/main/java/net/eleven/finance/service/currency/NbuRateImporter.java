@@ -1,6 +1,7 @@
 package net.eleven.finance.service.currency;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.eleven.finance.model.Currency;
 import net.eleven.finance.model.CurrencyRate;
 import net.eleven.finance.model.RateProvider;
 import org.springframework.stereotype.Service;
@@ -17,12 +18,15 @@ import java.util.stream.Collectors;
 @Service
 public class NbuRateImporter implements RateImporter {
 
-    @RequesterType(provider = RateProvider.NBU)
     private Requester requester;
 
+    private CurrencyService currencyService;
+
     @Inject
-    public NbuRateImporter(Requester requester) {
+    public NbuRateImporter(@RequesterType(provider = RateProvider.NBU) Requester requester,
+                           CurrencyService currencyService) {
         this.requester = requester;
+        this.currencyService = currencyService;
     }
 
     @Override
@@ -30,12 +34,17 @@ public class NbuRateImporter implements RateImporter {
         String response = requester.makeRequest("");
         ObjectMapper objectMapper = new ObjectMapper();
         List<NbuRateResponse> objects = Arrays.asList(objectMapper.readValue(response, NbuRateResponse[].class));
-        // TODO: 03.12.2018 converter class parametrized with rate provider (типа new Converter(RateProvider.NBU))
-        // TODO: 03.12.2018 фильтровать currency: записывать курсы только для существующих валют
         return objects
                 .stream()
-                .map(
-                        (NbuRateResponse item) -> new CurrencyRate(item.getCurrency(), item.getRate(), item.getForDate(), RateProvider.NBU))
+                .map(NbuRateResponse::toCurrencyRate)
+                .map(this::toExistingCurrency)
+                .filter(rate -> rate.getCurrency() != null)
                 .collect(Collectors.toList());
+    }
+
+    private CurrencyRate toExistingCurrency(CurrencyRate rate) {
+        Currency currency = currencyService.findByCode(rate.getCurrency().getCurrencyCode());
+        rate.setCurrency(currency);
+        return rate;
     }
 }

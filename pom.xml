@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.eleven.finance</groupId>
-    <artifactId>FinanceAdmin</artifactId>
+    <artifactId>finance</artifactId>
     <version>1.0.0</version>
     <packaging>war</packaging>
 

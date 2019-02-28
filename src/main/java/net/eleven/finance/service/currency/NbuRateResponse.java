@@ -4,9 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import net.eleven.finance.model.Currency;
+import net.eleven.finance.model.CurrencyRate;
+import net.eleven.finance.model.RateProvider;
 
 import java.util.Date;
 
@@ -15,11 +16,8 @@ import java.util.Date;
  */
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class NbuRateResponse {
-    @JsonProperty("txt")
-    private String text;
 
     @JsonProperty("rate")
     private float rate;
@@ -28,6 +26,10 @@ public class NbuRateResponse {
     private Currency currency;
 
     @JsonProperty("exchangedate")
-    @JsonFormat(pattern = "dd.MM.+yyyy")
+    @JsonFormat(pattern = "dd.MM.yyyy")
     private Date forDate;
+
+    public CurrencyRate toCurrencyRate() {
+        return new CurrencyRate(currency, rate, forDate, RateProvider.NBU);
+    }
 }

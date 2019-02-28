@@ -1,7 +1,8 @@
 package net.eleven.finance.model;
 
 import lombok.AllArgsConstructor;
-import org.hibernate.annotations.Immutable;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -10,8 +11,8 @@ import java.util.Date;
  * Created by eleven on 02.12.2018.
  */
 @Entity
-@Immutable
 @AllArgsConstructor
+@Getter
 public class CurrencyRate {
     public CurrencyRate(Currency currency, float rate, Date forDate, RateProvider provider) {
         this.currency = currency;
@@ -25,6 +26,7 @@ public class CurrencyRate {
     private long id;
 
     @ManyToOne
+    @Setter
     private Currency currency;
 
     private float rate;
