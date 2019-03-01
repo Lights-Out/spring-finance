@@ -6,6 +6,7 @@ import net.eleven.finance.model.Currency;
 import net.eleven.finance.model.Merchandise;
 import net.eleven.finance.model.Product;
 import net.eleven.finance.repository.MerchandiseRepository;
+import net.eleven.finance.service.ProductService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,35 +28,30 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("Test")
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {RootConfig.class})
-public class MerchandiseControllerTest {
+public class MerchandiseControllerTestIT {
     public static final String APPLICATION_JSON_CHARSET_UTF_8 = "application/json;charset=UTF-8";
 
     private MockMvc mockMvc;
 
     @Inject
-    private MerchandiseRepository repository;
+    private MerchandiseController controller;
 
     @Before
     public void setUp() {
-//        repository = mock(MerchandiseRepository.class);
-        MerchandiseController controller = new MerchandiseController(repository);
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
                 .setControllerAdvice(new RestExceptionHandler())
                 .build();
     }
 
     @Test
-    public void testNewMerchandiseShouldRequireExistingProduct() throws Exception {
+    public void shouldCorrectlySaveMerchandise() throws Exception {
         Product product = new Product("first", 11.0f, new Currency("USD"));
         Merchandise merchandise = new Merchandise(product, 5);
 
         mockMvc.perform(post("/rest/merchandises/new")
         .contentType(APPLICATION_JSON_CHARSET_UTF_8)
         .content(new ObjectMapper().writeValueAsBytes(merchandise)))
-            .andExpect(status().isBadRequest())
+            .andExpect(status().isOk())
             .andExpect(content().contentType(APPLICATION_JSON_CHARSET_UTF_8));
-
-
-
     }
 }

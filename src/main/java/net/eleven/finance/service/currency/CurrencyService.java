@@ -1,14 +1,11 @@
-package net.eleven.finance.repository;
+package net.eleven.finance.service.currency;
 
 import net.eleven.finance.model.Currency;
 import org.springframework.dao.DataAccessException;
 
 import java.util.Collection;
 
-/**
- * Created by eleven on 28.10.2018.
- */
-public interface CurrencyRepository {
+public interface CurrencyService {
     Currency findById(long id) throws DataAccessException;
     Currency findByCode(String code) throws DataAccessException;
     Collection<Currency> findAll() throws DataAccessException;

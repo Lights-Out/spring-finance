@@ -22,7 +22,7 @@ public class Merchandise {
 
     @NotNull
     @NonNull
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Product product;
 
     @NonNull

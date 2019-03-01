@@ -33,7 +33,7 @@ public class Product {
 
     private double price;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Currency currency;
 
     @UpdateTimestamp
